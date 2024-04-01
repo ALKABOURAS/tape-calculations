@@ -2,47 +2,244 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="index.css">
     <title>Υπ. Ρολών</title>
 </head>
-<script src="hello.js"></script>
 <body>
-<h1>ΥΠΟΛΟΓΙΣΜΟΣ ΔΙΑΜΕΤΡΟΥ ΡΟΛΟΥ ΚΑΙ ΜΗΚΟΣ ΧΑΡΤΙΟΥ</h1>
-<DIV>
-    <label for="mandren">ΕΞΩΤΕΡΙΚΗ ΔΙΑΜΕΤΡΟΣ ΜΑΝΔΡΕΝ</label>
-    <INPUT TYPE="text" ID="mandren">
-</DIV>
-<DIV>
-    <label for="ypsos">ΥΨΟΣ ΕΤΙΚΕΤΑΣ</label>
-    <input type="text" id="ypsos">
-</DIV>
-<DIV>
-    <label for="gap">ΓΚΑΠ</LABEL>
-    <input type="text" id="gap">
-</DIV>
-<div>
-    <label for="platos">ΠΛΑΤΟΣ ΕΤΙΚΕΤΑΣ</label>
-    <input type="text" id="platos">
+<div style="display: flex; flex-direction: row;">
+    <div style="display: flex; flex-direction: column;width: 100%; ">
+        <div style="background: #f8f9fa; text-align: center">
+            <h1>Υπολογισμός Διαμέτρου ρολού και μήκος χαρτιού</h1>
+            <h2>ΤΙΜΕΣ ΣΕ mm</h2>
+            <div style="display: flex; flex-direction: row; justify-content: space-evenly;text-align: center; padding-bottom: 1.5em">
+                <DIV>
+                    <label for="mandren" class="label-cal">ΕΞ. ΔΙΑΜΕΤΡΟΣ ΜΑΝΔΡΕΝ</label>
+                    <INPUT TYPE="number" ID="mandren" class="input-cal">
+                </DIV>
+                <DIV>
+                    <label for="ypsos" class="label-cal">ΥΨΟΣ ΕΤΙΚΕΤΑΣ</label>
+                    <input type="number" id="ypsos" class="input-cal">
+                </DIV>
+            </div>
+            <div style="display: flex; flex-direction: row; justify-content: space-evenly;text-align: center; padding-bottom: 1.5em">
+                <DIV>
+                    <label for="gap" class="label-cal">ΓΚΑΠ</LABEL>
+                    <input type="number" id="gap" class="input-cal">
+                </DIV>
+                <DIV>
+                    <label for="paxos" class="label-cal">ΠΑΧΟΣ ΧΑΡΤΙΟΥ</label>
+                    <input type="number" id="paxos" class="input-cal">
+                </DIV>
+            </div>
+            <div style="display: flex; flex-direction: row; justify-content: space-evenly;text-align: center; padding-bottom: 1.5em">
+                <DIV>
+                    <label for="number" class="label-cal">ΑΡΙΘΜΟΣ ΕΤΙΚΕΤΩΝ</label>
+                    <input type="number" id="number" class="input-cal">
+                </DIV>
+                <DIV>
+                    <label for="diametros" class="label-cal">ΔΙΑΜΕΤΡΟΣ ΡΟΛΟΥ</label>
+                    <input type="number" id="diametros" class="input-cal">
+                </DIV>
+
+            </div>
+            <div style="display: flex; flex-direction: row; justify-content: space-evenly;text-align: center; padding-bottom: 1.5em">
+                <DIV>
+                    <label for="xarti" class="label-cal">ΜΗΚΟΣ ΧΑΡΤΙΟΥ</label>
+                    <input type="number" id="xarti" readonly class="input-cal">
+                </DIV>
+
+                <button id="button_num" onclick="calculate_number()">ΥΠΟΛ. ΑΡΙΘΜΟ</button>
+                <button id="button_diam" onclick="calculate_diametros()">ΥΠΟΛ. ΔΙΑΜΕΤΡΟ</button>
+
+            </div>
+        </div>
+        <div style="background: #f8f9fa; text-align: center">
+            <h2 style="text-align: center">Ιστορικό Υπολογισμών</h2>
+            <table id="historyTable">
+                <thead>
+                <tr>
+                    <th>ΕΞ. ΔΙΑΜΕΤΡΟΣ ΜΑΝΔΡΕΝ</th>
+                    <th>ΥΨΟΣ ΕΤΙΚΕΤΑΣ</th>
+                    <th>ΓΚΑΠ</th>
+                    <th>ΠΑΧΟΣ ΧΑΡΤΙΟΥ</th>
+                    <th>ΑΡΙΘΜΟΣ ΕΤΙΚΕΤΩΝ</th>
+                    <th>ΔΙΑΜΕΤΡΟΣ ΡΟΛΟΥ</th>
+                    <th>ΜΗΚΟΣ ΧΑΡΤΙΟΥ</th>
+                    <!-- Add columns for any calculation results -->
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Calculation history will be appended here -->
+                </tbody>
+            </table>
+            <button onclick="clearHistory()">Καθαρισμός Ιστορικού</button>
+            <button onclick="populateInputsFromSelectedRow()">Γέμισε από την επιλεγμένη γραμμή</button>
+
+        </div>
+
+    </div>
+
+
+    <div style="flex-direction: column; background: linear-gradient(135deg, #e9ecef, #dee2e6); width: 100%">
+        <div style="display: flex; justify-content: center;">
+            <h1>Απεικόνιση Συσκευασίας Ρολών</h1>
+        </div>
+        <div style="display: flex; flex-direction: row">
+            <div style="margin-left: 1em">
+                <label for="boxWidth" class="label-vis">Πλάτος Κουτιού:</label>
+                <input type="number" id="boxWidth" value="500" class="input-vis"/>
+                <label for="boxHeight" class="label-vis">Μήκος Κουτιού:</label>
+                <input type="number" id="boxHeight" value="400" class="input-vis"/>
+                <label for="circleDiameter" class="label-vis">Διάμετρος Ρολού:</label>
+                <input type="number" id="circleDiameter" value="30" class="input-vis"/>
+                <div>
+                    <button id="button" onclick="generateSvgVisualization()">Υπολογισμός</button>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column;">
+                <div style="text-align: center">
+                    <h2>Τριγωνική Απεικόνιση</h2>
+                    <div style="padding-bottom: 0.5em"><span style="font-size: 25px">Αριθμός Ρολών: </span><span class="circlesNum" id="cirlesNumberT"></span></div>
+                    <div id="svgContainerTriangular"></div>
+                </div>
+                <div style="text-align: center">
+                    <h2>Τετραγωνική Απεικόνιση</h2>
+                    <div style="padding-bottom: 0.5em"><span style="font-size: 25px">Αριθμός Ρολών: </span><span class="circlesNum" id="cirlesNumberR"></span></div>
+                    <div id="svgContainerRectangular"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>
-<DIV>
-    <label for="paxos">ΠΑΧΟΣ ΧΑΡΤΙΟΥ</label>
-    <input type="text" id="paxos">
-</DIV>
-<DIV>
-    <label for="number">ΑΡΙΘΜΟΣ ΕΤΙΚΕΤΩΝ</label>
-    <input type="text" id="number">
-</DIV>
-<DIV>
-    <label for="diametros">ΔΙΑΜΕΤΡΟΣ ΡΟΛΟΥ</label>
-    <input type="text" id="diametros">
-</DIV>
-<DIV>
-    <label for="xarti">ΜΗΚΟΣ ΧΑΡΤΙΟΥ</label>
-    <input type="text" id="xarti" readonly>
-</DIV>
-<div>
-    <button id="button_num" onclick="calculate_number()">ΥΠΟΛ. ΑΡΙΘΜΟ</button>
-    <button id="button_diam" onclick="calculate_diametros()">ΥΠΟΛ. ΔΙΑΜΕΤΡΟ</button>
-</div>
-<H2>ΔΩΣΤΕ ΤΙΜΕΣ ΣΕ mm</H2>
+
+
+<script>
+    function calculate_diametros() {
+        const ypsos = parseInt(document.getElementById("ypsos").value);
+        const gap = parseFloat(document.getElementById("gap").value);
+        const number = parseInt(document.getElementById("number").value);
+        const paxos = parseFloat(document.getElementById("paxos").value);
+        const mandren = parseInt(document.getElementById("mandren").value);
+        const L = (ypsos + gap) * number;
+        const result = Math.sqrt(((L * paxos) + (3.14 * mandren*mandren))/3.14)
+        const updatedL = Math.round(L * 100)/100
+        const updatedResult = Math.round(result * 100)/100
+        document.getElementById("diametros").value = updatedResult;
+        document.getElementById("xarti").value = updatedL;
+        updateHistory(mandren, ypsos, gap, paxos, number, updatedResult, updatedL);
+    }
+    function calculate_number() {
+        const ypsos = document.getElementById("ypsos").value;
+        const gap = document.getElementById("gap").value;
+        const paxos = document.getElementById("paxos").value;
+        const mandren = document.getElementById("mandren").value;
+        const diametros = document.getElementById("diametros").value;
+        const number = (3.14 * (diametros*diametros - mandren*mandren) / paxos);
+        const result = number/(parseInt(ypsos) + parseInt(gap));
+        const updatedResult = Math.round(result * 100)/100
+        // round number 2 decimal places
+        document.getElementById("number").value = updatedResult;
+        updateHistory(mandren, ypsos, gap, paxos, updatedResult, diametros, "N/A");
+    }
+    function updateHistory(mandren, ypsos, gap, paxos, number, diametros, xarti) {
+        const table = document.getElementById('historyTable').getElementsByTagName('tbody')[0];
+        const newRow = table.insertRow(table.rows.length);
+        newRow.innerHTML = `<td>${mandren}</td><td>${ypsos}</td><td>${gap}</td><td>${paxos}</td><td>${number}</td><td>${diametros}</td><td>${xarti}</td>`;
+
+        newRow.onclick = function() {
+            // Remove selection from previously selected row
+            const selected = document.querySelector('.selected');
+            if (selected) {
+                selected.classList.remove('selected');
+            }
+            // Mark the clicked row as selected
+            this.classList.add('selected');
+        };
+    }
+
+    function clearHistory() {
+        document.getElementById('historyTable').getElementsByTagName('tbody')[0].innerHTML = '';
+    }
+    function populateInputsFromSelectedRow() {
+        const selectedRow = document.querySelector('.selected');
+        if (!selectedRow) {
+            alert('Please select a row first.');
+            return;
+        }
+
+        const cells = selectedRow.querySelectorAll('td');
+        document.getElementById('mandren').value = cells[0].innerText;
+        document.getElementById('ypsos').value = cells[1].innerText;
+        document.getElementById('gap').value = cells[2].innerText;
+        document.getElementById('paxos').value = cells[3].innerText;
+        document.getElementById('number').value = cells[4].innerText;
+        document.getElementById('diametros').value = cells[5].innerText;
+        // Assuming the 'xarti' field is meant to be updated by one of the buttons
+        // document.getElementById('xarti').value = cells[6].innerText;
+    }
+
+    function generateSvgVisualizationT(rectWidth, rectHeight, circleDiameter) {
+        const radius = circleDiameter / 2;
+        const sqrt3 = Math.sqrt(3);
+        const horizontalCount = Math.floor(rectWidth / (circleDiameter * 0.75 + circleDiameter * 0.25));
+        const verticalSpacing = sqrt3 * radius;
+        const verticalCount = Math.floor(rectHeight / verticalSpacing);
+
+        let svgContent = `<svg width="${rectWidth}" height="${rectHeight}" style="border: 1px solid black;">`;
+
+        for (let y = 0; y < verticalCount; y++) {
+            for (let x = 0; x < horizontalCount; x++) {
+                let xOffset = (y % 2) * (circleDiameter /2);
+                let cx = (x * 2 * radius) + radius + xOffset;
+                let cy = (y * verticalSpacing) + radius;
+                svgContent += `<circle cx="${cx}" cy="${cy}" r="${radius}" style="fill: lightblue; stroke: black; stroke-width: 1;" />`;
+            }
+        }
+        // show the number of circles
+        document.getElementById("cirlesNumberT").innerText = horizontalCount * verticalCount;
+        svgContent += `</svg>`;
+
+        return svgContent;
+    }
+    function generateSvgVisualizationR(rectWidth, rectHeight, circleDiameter) {
+        const radius = circleDiameter / 2;
+        const horizontalCount = Math.floor(rectWidth / circleDiameter);
+        const verticalCount = Math.floor(rectHeight / circleDiameter);
+
+        let svgContent = `<svg width="${rectWidth}" height="${rectHeight}" style="border: 1px solid black;">`;
+
+        for (let y = 0; y < verticalCount; y++) {
+            for (let x = 0; x < horizontalCount; x++) {
+                let cx = x * circleDiameter + radius;
+                let cy = y * circleDiameter + radius;
+                svgContent += `<circle cx="${cx}" cy="${cy}" r="${radius}" style="fill: lightgreen; stroke: black; stroke-width: 1;" />`;
+            }
+        }
+        // show the number of circles
+        document.getElementById("cirlesNumberR").innerText = horizontalCount * verticalCount;
+
+        svgContent += `</svg>`;
+
+        return svgContent;
+    }
+
+    function generateSvgVisualization() {
+        // Parameters
+        const rectWidth = document.getElementById("boxWidth").value;
+        const rectHeight = document.getElementById("boxHeight").value;
+        const circleDiameter = document.getElementById("circleDiameter").value;
+
+        // Generate and append SVG to body
+        document.getElementById("svgContainerTriangular").innerHTML = generateSvgVisualizationT(rectWidth, rectHeight, circleDiameter);
+        document.getElementById("svgContainerRectangular").innerHTML = generateSvgVisualizationR(rectWidth, rectHeight, circleDiameter);
+    }
+    const rectWidth = document.getElementById("boxWidth").value;
+    const rectHeight = document.getElementById("boxHeight").value;
+    const circleDiameter = document.getElementById("circleDiameter").value;
+    document.getElementById("svgContainerTriangular").innerHTML = generateSvgVisualizationT(rectWidth, rectHeight, circleDiameter);
+    document.getElementById("svgContainerRectangular").innerHTML = generateSvgVisualizationR(rectWidth, rectHeight, circleDiameter);
+</script>
 </body>
 </html>
