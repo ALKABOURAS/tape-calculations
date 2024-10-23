@@ -187,23 +187,23 @@
         const horizontalCount = Math.floor(rectWidth / (circleDiameter * 0.75 + circleDiameter * 0.25));
         const verticalSpacing = sqrt3 * radius;
         const verticalCount = Math.floor(rectHeight / verticalSpacing);
-
+        const xOffset = (circleDiameter / 2);
         let svgContent = `<svg width="${rectWidth}" height="${rectHeight}" style="border: 1px solid black;">`;
-
+        let newHorizontalCount = 0;
         for (let y = 0; y < verticalCount; y++) {
             let adjustedHorizontalCount = horizontalCount;
-            if (y % 2 === 0) {
+            if (horizontalCount* circleDiameter + xOffset * (y % 2) > rectWidth) {
                 adjustedHorizontalCount -= 1;
+                newHorizontalCount += 1;
             }
-            for (let x = 0; x < horizontalCount; x++) {
-                let xOffset = (y % 2) * (circleDiameter /2);
-                let cx = (x * 2 * radius) + radius + xOffset;
+            for (let x = 0; x < adjustedHorizontalCount; x++) {
+                let cx = (x * 2 * radius) + radius + (y % 2) * xOffset;
                 let cy = (y * verticalSpacing) + radius;
                 svgContent += `<circle cx="${cx}" cy="${cy}" r="${radius}" style="fill: lightblue; stroke: black; stroke-width: 1;" />`;
             }
         }
         // show the number of circles
-        document.getElementById("cirlesNumberT").innerText = horizontalCount * verticalCount;
+        document.getElementById("cirlesNumberT").innerText = (horizontalCount * verticalCount) - newHorizontalCount;
         svgContent += `</svg>`;
 
         return svgContent;
