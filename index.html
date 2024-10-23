@@ -6,7 +6,7 @@
     <title>Υπ. Ρολών</title>
 </head>
 <body>
-<div style="display: flex; flex-direction: row;">
+<div style="display: flex; flex-direction: column;">
     <div style="display: flex; flex-direction: column;width: 100%; ">
         <div style="background: #f8f9fa; text-align: center">
             <h1>Υπολογισμός Διαμέτρου ρολού και μήκος χαρτιού</h1>
@@ -190,6 +190,10 @@
         let svgContent = `<svg width="${rectWidth}" height="${rectHeight}" style="border: 1px solid black;">`;
 
         for (let y = 0; y < verticalCount; y++) {
+            let adjustedHorizontalCount = horizontalCount;
+            if (y % 2 === 0) {
+                adjustedHorizontalCount -= 1;
+            }
             for (let x = 0; x < horizontalCount; x++) {
                 let xOffset = (y % 2) * (circleDiameter /2);
                 let cx = (x * 2 * radius) + radius + xOffset;
